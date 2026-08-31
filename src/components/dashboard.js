@@ -1,5 +1,5 @@
 import { ACCOUNT_A_CONFIG, ACCOUNT_B_CONFIG } from '../config/materials';
-import { isEntitledToPackage, hasDownloadPermission } from '../userService';
+import { isEntitledToPackage, hasDownloadPermission } from '../services/userService';
 
 export function renderDashboard(container, userProfile, onOpenMaterial) {
   const purchases = userProfile?.purchases || [];
