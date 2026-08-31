@@ -1,6 +1,6 @@
 import { fetchDriveFolderContents } from '../services/driveService';
 import { ACCOUNT_A_CONFIG, ACCOUNT_B_CONFIG } from '../config/materials';
-import { hasDownloadPermission } from '../userService';
+import { hasDownloadPermission } from '../services/userService';
 
 export function renderMaterialBrowser(container, options, userProfile, onBackToDashboard) {
   const { accountType, folderId, title } = options;
@@ -118,4 +118,3 @@ export function renderMaterialBrowser(container, options, userProfile, onBackToD
 
   loadFolder(folderId);
 }
-
