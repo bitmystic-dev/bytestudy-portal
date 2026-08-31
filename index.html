@@ -3,35 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>ByteStudy</title>
-    <link rel="stylesheet" href="src/style.css" />
+    <title>ByteStudy — Premium Academic Learning Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/main.css">
   </head>
   <body>
-    <header class="app-header">
-      <div class="header-container">
-        <div class="header-titles">
-          <h1>ByteStudy</h1>
-          <!-- This subtitle will now change dynamically -->
-          <span id="app-subtitle" class="subtitle">Viewing: JEE Resources</span>
-        </div>
-      </div>
-    </header>
-    
-    <main id="app-content" class="container">
-      
-      <!-- Library Switcher acts as your instant navigation between accounts -->
-      <div class="library-switcher">
-        <button id="btn-main-lib" class="lib-tab active">JEE Resources</button>
-        <button id="btn-allen-lib" class="lib-tab">Allen North Material</button>
-      </div>
-
-      <nav id="breadcrumbs" aria-label="Breadcrumb"></nav>
-      
-      <div id="dynamic-content">
-        <!-- Dynamic files and folders injected here -->
-      </div>
-    </main>
-
-    <script type="module" src="src/main.js"></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
+
