@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Verify admin access against the secure admin_users console-only collection
+    function isAdmin() {
+      return isAuthenticated() && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
+    }
+
+    // Lock admin collection from client modification
+    match /admin_users/{uid} {
+      allow read, write: if false;
+    }
+
+    // Customer profile rules
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+
+      // Block self-granting of purchases or download access on registration
+      allow create: if isOwner(userId)
+        && (!request.resource.data.keys().hasAny(['purchases', 'downloads', 'role', 'isAdmin'])
+            || (request.resource.data.purchases == [] && request.resource.data.downloads == false));
+
+      // Block modification of privileged entitlement fields
+      allow update: if isOwner(userId)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['purchases', 'downloads', 'role', 'isAdmin', 'email', 'createdAt'])
+        || isAdmin();
+
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+  }
+}
+
