@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { query, collection, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { PACKAGE_INCLUSIONS } from '../config/materials';
 
 export async function checkIsAdmin(uid) {
@@ -62,4 +62,13 @@ export function isEntitledToPackage(userPurchases, targetPackageId, isAdmin = fa
 export function hasDownloadPermission(profile, isAdmin = false) {
   if (isAdmin) return true;
   return Boolean(profile && profile.downloads === true);
+}
+
+export function listenToPublicNotifications(callback) {
+  const q = query(collection(db, 'public_notifications'), orderBy('timestamp', 'desc'));
+  return onSnapshot(q, (snapshot) => {
+    const notes = [];
+    snapshot.forEach(doc => notes.push({ id: doc.id, ...doc.data() }));
+    callback(notes);
+  });
 }
