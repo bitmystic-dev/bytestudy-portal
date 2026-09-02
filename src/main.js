@@ -1,5 +1,5 @@
 import { onAuthChange, logoutUser } from './services/auth';
-import { getUserProfile } from './services/userService';
+import { getUserProfile, checkIsAdmin } from './services/userService';
 
 import { renderNavbar } from './components/navbar';
 import { renderLanding } from './components/landing';
@@ -10,26 +10,47 @@ import { renderAccountSettings } from './components/accountSettings';
 
 let currentUser = null;
 let currentUserProfile = null;
+let isUserAdmin = false;
 let currentView = 'landing';
 let materialOptions = null;
 
 const appRoot = document.getElementById('app');
 
+function initTheme() {
+  const savedTheme = localStorage.getItem('bytestudy-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('bytestudy-theme', next);
+}
+
 function init() {
+  initTheme();
+  
   onAuthChange(async (user) => {
     if (user) {
       currentUser = user;
       try {
-        currentUserProfile = await getUserProfile(user.uid);
+        const [profile, adminStatus] = await Promise.all([
+          getUserProfile(user.uid),
+          checkIsAdmin(user.uid)
+        ]);
+        currentUserProfile = profile;
+        isUserAdmin = adminStatus;
       } catch (e) {
-        console.error('Error fetching user profile:', e);
+        console.error('Error fetching user data:', e);
       }
-      if (currentView === 'landing' || currentView === 'login' || currentView === 'signup') {
+      if (['landing', 'login', 'signup'].includes(currentView)) {
         currentView = 'dashboard';
       }
     } else {
       currentUser = null;
       currentUserProfile = null;
+      isUserAdmin = false;
       currentView = 'landing';
     }
     router();
@@ -42,6 +63,10 @@ function router() {
   const contentRoot = document.getElementById('content-root');
 
   renderNavbar(navRoot, currentUser, (target) => {
+    if (target === 'toggle-theme') {
+      toggleTheme();
+      return;
+    }
     if (target === 'logout') {
       logoutUser();
       return;
@@ -52,50 +77,32 @@ function router() {
 
   switch (currentView) {
     case 'landing':
-      renderLanding(contentRoot, (view) => {
-        currentView = view;
-        router();
-      });
+      renderLanding(contentRoot, (view) => { currentView = view; router(); });
       break;
-
     case 'login':
-      renderLoginForm(contentRoot, (view) => {
-        currentView = view;
-        router();
-      });
+      renderLoginForm(contentRoot, (view) => { currentView = view; router(); });
       break;
-
     case 'signup':
-      renderSignupForm(contentRoot, (view) => {
-        currentView = view;
-        router();
-      });
+      renderSignupForm(contentRoot, (view) => { currentView = view; router(); });
       break;
-
     case 'forgot':
-      renderForgotPasswordForm(contentRoot, (view) => {
-        currentView = view;
-        router();
-      });
+      renderForgotPasswordForm(contentRoot, (view) => { currentView = view; router(); });
       break;
-
     case 'dashboard':
       if (!currentUser) { currentView = 'login'; router(); return; }
-      renderDashboard(contentRoot, currentUserProfile, (opts) => {
+      renderDashboard(contentRoot, currentUserProfile, isUserAdmin, (opts) => {
         materialOptions = opts;
         currentView = 'browser';
         router();
       });
       break;
-
     case 'browser':
       if (!currentUser) { currentView = 'login'; router(); return; }
-      renderMaterialBrowser(contentRoot, materialOptions, currentUserProfile, () => {
+      renderMaterialBrowser(contentRoot, materialOptions, currentUserProfile, isUserAdmin, () => {
         currentView = 'dashboard';
         router();
       });
       break;
-
     case 'settings':
       if (!currentUser) { currentView = 'login'; router(); return; }
       renderAccountSettings(contentRoot, currentUserProfile, currentUser, () => {
@@ -103,12 +110,8 @@ function router() {
         router();
       });
       break;
-
     default:
-      renderLanding(contentRoot, (view) => {
-        currentView = view;
-        router();
-      });
+      renderLanding(contentRoot, (view) => { currentView = view; router(); });
   }
 }
 
