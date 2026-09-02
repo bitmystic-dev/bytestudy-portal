@@ -2,7 +2,6 @@ export const PACKAGES = {
   CLASS_11_MATHS: 'class_11_maths',
   CLASS_11_PHYSICS: 'class_11_physics',
   CLASS_11_CHEMISTRY: 'class_11_chemistry',
-  CLASS_11_MISC: 'class_11_misc',
   CLASS_12_MATHS: 'class_12_maths',
   CLASS_12_PHYSICS: 'class_12_physics',
   CLASS_12_CHEMISTRY: 'class_12_chemistry',
@@ -16,8 +15,7 @@ export const PACKAGE_INCLUSIONS = {
   [PACKAGES.CLASS_11_COMPLETE]: [
     PACKAGES.CLASS_11_MATHS,
     PACKAGES.CLASS_11_PHYSICS,
-    PACKAGES.CLASS_11_CHEMISTRY,
-    PACKAGES.CLASS_11_MISC
+    PACKAGES.CLASS_11_CHEMISTRY
   ],
   [PACKAGES.CLASS_12_COMPLETE]: [
     PACKAGES.CLASS_12_MATHS,
@@ -28,7 +26,6 @@ export const PACKAGE_INCLUSIONS = {
     PACKAGES.CLASS_11_MATHS,
     PACKAGES.CLASS_11_PHYSICS,
     PACKAGES.CLASS_11_CHEMISTRY,
-    PACKAGES.CLASS_11_MISC,
     PACKAGES.CLASS_12_MATHS,
     PACKAGES.CLASS_12_PHYSICS,
     PACKAGES.CLASS_12_CHEMISTRY,
@@ -48,7 +45,7 @@ export const ACCOUNT_A_CONFIG = {
         name: 'Mathematics',
         classLevel: '11',
         icon: '📐',
-        folderId: 'YOUR_CLASS_11_MATHS_FOLDER_ID',
+        folderId: '1zZQJeEy1PClYGnW0ZLL-ojqZQr_SI1rU',
         isAvailable: true
       },
       physics: {
@@ -56,7 +53,7 @@ export const ACCOUNT_A_CONFIG = {
         name: 'Physics',
         classLevel: '11',
         icon: '⚡',
-        folderId: 'YOUR_CLASS_11_PHYSICS_FOLDER_ID',
+        folderId: '1Zid9vQ1QOlNMr-z5o5G66wYf8UQhNw89',
         isAvailable: true
       },
       chemistry: {
@@ -64,15 +61,7 @@ export const ACCOUNT_A_CONFIG = {
         name: 'Chemistry',
         classLevel: '11',
         icon: '🧪',
-        folderId: 'YOUR_CLASS_11_CHEMISTRY_FOLDER_ID',
-        isAvailable: true
-      },
-      miscellaneous: {
-        id: PACKAGES.CLASS_11_MISC,
-        name: 'Miscellaneous Notes & Solved Papers',
-        classLevel: '11',
-        icon: '📚',
-        folderId: 'YOUR_CLASS_11_MISC_FOLDER_ID',
+        folderId: '135egm_eRUz-fCsu1XyFG57UcRBJNbFwE',
         isAvailable: true
       }
     },
