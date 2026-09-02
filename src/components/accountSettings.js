@@ -7,7 +7,7 @@ export function renderAccountSettings(container, userProfile, user, onBack) {
     <div class="bs-container" style="max-width: 500px;">
       <div class="bs-card">
         <h2 style="font-size: 20px; margin-bottom: 4px;">Account Settings</h2>
-        <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">${user.email}</p>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">${user.email}</p>
 
         <div id="settings-alert"></div>
 
@@ -27,11 +27,11 @@ export function renderAccountSettings(container, userProfile, user, onBack) {
           <button type="submit" class="bs-btn-secondary" style="width: 100%;">Change Password</button>
         </form>
 
-        <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+        <div style="border-top: 1px solid var(--border-color); padding-top: 16px;">
           <button type="button" class="bs-btn-danger" id="btn-delete-acc" style="width: 100%;">Delete Account</button>
         </div>
 
-        <button type="button" id="btn-close-settings" style="background:none; color:#64748b; width:100%; margin-top:16px; font-size:14px;">Back to Dashboard</button>
+        <button type="button" id="btn-close-settings" style="background:none; color:var(--text-muted); width:100%; margin-top:16px; font-size:14px; cursor: pointer; border: none;">Back to Dashboard</button>
       </div>
     </div>
   `;
