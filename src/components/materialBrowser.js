@@ -2,10 +2,10 @@ import { fetchDriveFolderContents } from '../services/driveService';
 import { ACCOUNT_A_CONFIG, ACCOUNT_B_CONFIG } from '../config/materials';
 import { hasDownloadPermission } from '../services/userService';
 
-export function renderMaterialBrowser(container, options, userProfile, onBackToDashboard) {
+export function renderMaterialBrowser(container, options, userProfile, isAdmin, onBackToDashboard) {
   const { accountType, folderId, title } = options;
   const apiKey = accountType === 'B' ? ACCOUNT_B_CONFIG.apiKey : ACCOUNT_A_CONFIG.apiKey;
-  const canDownload = hasDownloadPermission(userProfile);
+  const canDownload = hasDownloadPermission(userProfile, isAdmin);
 
   let folderHistory = [{ id: folderId, name: title }];
 
@@ -14,7 +14,7 @@ export function renderMaterialBrowser(container, options, userProfile, onBackToD
       <div class="bs-container">
         <div class="bs-breadcrumb" id="browser-breadcrumbs"></div>
         <div class="bs-card" style="text-align: center; padding: 40px;">
-          <p style="color: #64748b;">Loading files and subdirectories...</p>
+          <p style="color: var(--text-muted);">Loading files and subdirectories...</p>
         </div>
       </div>
     `;
@@ -68,25 +68,25 @@ export function renderMaterialBrowser(container, options, userProfile, onBackToD
     let listHTML = '';
 
     if (items.length === 0) {
-      listHTML = `<div style="text-align:center; padding: 30px; color: #64748b;">This directory is empty.</div>`;
+      listHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted);">This directory is empty.</div>`;
     } else {
       items.forEach(item => {
         listHTML += `
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
               <span style="font-size: 20px;">${item.isFolder ? '📁' : '📄'}</span>
               <div>
                 <div style="font-weight: 600; font-size: 15px;">${item.name}</div>
-                ${item.size ? `<div style="font-size: 12px; color: #64748b;">${item.size}</div>` : ''}
+                ${item.size ? `<div style="font-size: 12px; color: var(--text-muted);">${item.size}</div>` : ''}
               </div>
             </div>
-            <div>
+            <div style="display: flex; gap: 8px;">
               ${item.isFolder ? `
                 <button class="bs-btn-secondary btn-open-folder" data-id="${item.id}" data-name="${item.name}">Open</button>
               ` : `
-                <a href="${item.webViewLink}" target="_blank" rel="noopener noreferrer" class="bs-btn-secondary" style="display:inline-flex; align-items:center; text-decoration:none; padding: 0 16px; height: 44px; line-height: 44px;">View Document</a>
+                <a href="${item.webViewLink}" target="_blank" rel="noopener noreferrer" class="bs-btn-secondary" style="display:inline-flex; align-items:center; text-decoration:none; padding: 0 16px; height: 44px; line-height: 44px;">View</a>
                 ${canDownload && item.webContentLink ? `
-                  <a href="${item.webContentLink}" target="_blank" class="bs-btn-primary" style="display:inline-flex; align-items:center; text-decoration:none; margin-left:8px; padding: 0 16px; height: 44px; line-height: 44px;">Download</a>
+                  <a href="${item.webContentLink}" target="_blank" class="bs-btn-primary" style="display:inline-flex; align-items:center; text-decoration:none; padding: 0 16px; height: 44px; line-height: 44px;">Download</a>
                 ` : ''}
               `}
             </div>
