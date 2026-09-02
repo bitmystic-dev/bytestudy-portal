@@ -159,12 +159,73 @@ button {
 .bs-breadcrumb-item { color: var(--primary); cursor: pointer; font-weight: 500; }
 .bs-breadcrumb-item:last-child { color: var(--text-muted); cursor: default; }
 
-/* Responsive Overrides */
-@media (max-width: 600px) {
-  .bs-navbar { flex-direction: column; gap: 16px; padding: 16px; }
-  .bs-navbar-actions { width: 100%; justify-content: center; flex-wrap: wrap; gap: 8px; }
-  .bs-container { padding: 16px 12px; }
-  .bs-grid { grid-template-columns: 1fr; }
-  .bs-card { padding: 16px; }
-  .dash-header-mobile { flex-direction: column; align-items: flex-start; gap: 8px; }
+/* =========================================
+   Enhanced Mobile Responsiveness (Public Portal)
+========================================= */
+@media (max-width: 768px) {
+  /* Stack the navigation bar and make buttons full-width */
+  .bs-navbar {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .bs-navbar-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .bs-navbar-actions button {
+    width: 100%;
+    margin-right: 0 !important; /* Removes the hardcoded desktop margins */
+  }
+
+  /* Adjust container padding and grid layouts */
+  .bs-container {
+    padding: 16px 12px;
+  }
+  
+  .bs-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dash-header-mobile {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+
+  /* Fix Material Browser file lists to stack nicely on phones */
+  .bs-card > div[style*="display: flex"] {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+  
+  .bs-card > div[style*="display: flex"] > div:last-child {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  
+  .bs-card > div[style*="display: flex"] > div:last-child button,
+  .bs-card > div[style*="display: flex"] > div:last-child a {
+    flex: 1; /* Makes View/Download buttons share the space evenly */
+    justify-content: center;
+  }
+
+  /* Fix the In-App PDF Viewer header */
+  #bs-doc-title {
+    font-size: 14px !important;
+    max-width: 55% !important;
+  }
+  
+  #bs-close-modal {
+    font-size: 12px !important;
+    padding: 0 10px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+  }
 }
