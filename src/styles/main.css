@@ -229,3 +229,130 @@ button {
     line-height: 32px !important;
   }
 }
+
+/* =========================================
+   Public Notifications & Bell UI
+========================================= */
+.notif-bell-wrapper {
+  position: relative;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg, #ffffff);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  transition: 0.2s;
+  user-select: none;
+}
+
+.notif-bell-wrapper:hover {
+  border-color: var(--primary-color, #6366f1);
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444; /* Danger Red */
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 2px 6px;
+  display: none;
+}
+
+/* Expandable Card Layout */
+.notif-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.notif-card:hover {
+  border-color: var(--primary-color, #6366f1);
+}
+
+.notif-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6; /* Action Blue */
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notif-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-color, #1e293b);
+}
+
+.notif-author {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-left: auto;
+}
+
+/* Clamped Text with Fade Mask */
+.notif-body {
+  position: relative;
+  max-height: 44px; /* Approximates 2 lines of text */
+  overflow: hidden;
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+/* The fading gradient matches the exact background of the card */
+.notif-body.fade-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  background: linear-gradient(transparent, var(--card-bg, #ffffff));
+}
+
+/* Expanded State */
+.notif-body.expanded {
+  max-height: none;
+  opacity: 1;
+}
+
+.notif-body.expanded::after {
+  display: none;
+}
+
+/* Restyle Quill HTML Elements safely inside the card */
+.notif-body p { margin-bottom: 8px; }
+.notif-body p:last-child { margin-bottom: 0; }
+.notif-body ul, .notif-body ol { margin-left: 20px; margin-bottom: 8px; }
+
+/* Mobile Stack for Navbar Bell */
+@media (max-width: 768px) {
+  .bs-navbar-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .notif-bell-wrapper {
+    flex: 1;
+    min-width: 60px;
+  }
+}
+
