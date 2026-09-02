@@ -4,9 +4,10 @@ export function renderNavbar(container, user, onNavigate) {
   container.innerHTML = `
     <header class="bs-navbar">
       <div class="bs-logo" id="nav-brand">
-        📚 ByteStudy <span style="font-size: 12px; background: #e0e7ff; color: #4338ca; padding: 2px 6px; border-radius: 4px;">Public</span>
+        📚 ByteStudy <span style="font-size: 12px; background: rgba(99, 102, 241, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px;">Public</span>
       </div>
-      <div>
+      <div class="bs-navbar-actions">
+        <button id="theme-toggle" style="background:transparent; border:none; font-size:20px; margin-right: 12px; cursor: pointer;" title="Toggle Theme">🌓</button>
         ${isAuth ? `
           <button class="bs-btn-secondary" id="nav-dashboard" style="margin-right: 8px;">Materials</button>
           <button class="bs-btn-secondary" id="nav-settings" style="margin-right: 8px;">Account</button>
@@ -19,6 +20,7 @@ export function renderNavbar(container, user, onNavigate) {
     </header>
   `;
 
+  document.getElementById('theme-toggle').addEventListener('click', () => onNavigate('toggle-theme'));
   document.getElementById('nav-brand').addEventListener('click', () => onNavigate(isAuth ? 'dashboard' : 'landing'));
 
   if (isAuth) {
