@@ -1,6 +1,5 @@
 import { db } from '../firebase';
-import { query, collection, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
-import { PACKAGE_INCLUSIONS } from '../config/materials';
+import { query, collection, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, getDocs, where } from 'firebase/firestore';
 
 export async function checkIsAdmin(uid) {
   if (!uid) return false;
@@ -44,19 +43,11 @@ export async function deleteUserProfileDoc(uid) {
   await deleteDoc(userRef);
 }
 
+// Updated for Dynamic CMS: Direct 1:1 check against CMS module IDs
 export function isEntitledToPackage(userPurchases, targetPackageId, isAdmin = false) {
   if (isAdmin) return true;
   if (!Array.isArray(userPurchases)) return false;
-  if (userPurchases.includes(targetPackageId)) return true;
-
-  for (let i = 0; i < userPurchases.length; i++) {
-    const activePkg = userPurchases[i];
-    const inclusions = PACKAGE_INCLUSIONS[activePkg] || [];
-    if (inclusions.includes(targetPackageId)) {
-      return true;
-    }
-  }
-  return false;
+  return userPurchases.includes(targetPackageId);
 }
 
 export function hasDownloadPermission(profile, isAdmin = false) {
@@ -71,4 +62,29 @@ export function listenToPublicNotifications(callback) {
     snapshot.forEach(doc => notes.push({ id: doc.id, ...doc.data() }));
     callback(notes);
   });
+}
+
+// Fetches the Categories and Published Modules from the Headless CMS
+export async function fetchDashboardContent() {
+  const catsSnap = await getDocs(query(collection(db, 'course_categories'), orderBy('displayOrder', 'asc')));
+  const modsSnap = await getDocs(query(collection(db, 'course_modules'), where('status', '==', 'published')));
+  
+  const categories = [];
+  catsSnap.forEach(d => categories.push({ id: d.id, ...d.data() }));
+  
+  const modules = [];
+  const now = new Date().getTime();
+  
+  modsSnap.forEach(d => {
+    const m = { id: d.id, ...d.data() };
+    
+    // Serverless Scheduler: Skip rendering if publish date is in the future
+    if (m.publishAt) {
+      const pubTime = new Date(m.publishAt).getTime();
+      if (pubTime > now) return; 
+    }
+    modules.push(m);
+  });
+  
+  return { categories, modules };
 }
